@@ -1,2 +1,2 @@
 # Modder2
-Mode system using plugins written in Python
+Mod system using plugins written in Python
