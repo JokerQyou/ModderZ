@@ -54,16 +54,27 @@ class ModManager(object):
             if issubclass(cls, modder.ModBase):
                 self.mods.append(cls())
 
-    def execute(self, mod_func, event_name):
+    def execute(self, mod_func, event):
         '''Trigger a registered mod method'''
         # TODO Use a threadpool or something to async execute funtions
         if callable(mod_func):
-            mod_func(event_name)
+            mod_func(event)
 
     def trigger(self, name):
         '''Trigger an event and broadcast it to all subscribed mods'''
-        if name in modder.MOD_REGISTRY:
-            [self.execute(func, name) for func in modder.MOD_REGISTRY[name]]
+        if name in modder.EVENTS:
+            if name in modder.MOD_REGISTRY:
+                event = self.__generate_event(name)
+                [self.execute(func, event) for func in modder.MOD_REGISTRY[name]]
+
+    def __generate_event(self, name):
+        '''Generate Event object with data'''
+        if name.startswith('Modder.'):
+            return modder.Event(name)
+        elif name.startswith('Timer.'):
+            return modder.Event(name, data={'timestamp': time.time()})
+        else:
+            return modder.Event(name)
 
 
 def test():
