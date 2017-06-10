@@ -2,7 +2,6 @@
 import atexit
 import glob
 import importlib
-import inspect
 import os.path
 import queue
 import threading
@@ -17,12 +16,20 @@ class ModManager(object):
         if not mod_directory:
             mod_directory = os.path.join(os.path.dirname(__file__), 'mods')
         self.mod_directory = mod_directory
-        self.mods = []
-        self.mod_definitions = []
+        self.__pool = None
 
         self.check_mod_directory()
         self.load_mods()
-        self.init_mods()
+        self.init_pool()
+
+    def init_pool(self):
+        '''Init pool container for mod executors'''
+        if self.__pool is None:
+            pool_size = 0
+            for event, mods in modder.MOD_REGISTRY.items():
+                pool_size += len(mods)
+
+            self.__pool = modder.ExecutorPool(pool_size)
 
     def check_mod_directory(self):
         '''Make sure `mod_directory` is a valid Python package'''
@@ -35,38 +42,37 @@ class ModManager(object):
                 wf.write('# coding: utf-8')
 
     def load_mods(self):
-        '''
-        Import all modules in `mod_directory`,
-        and load all ModBase subclasses into memory.
-        '''
+        '''Import all modules in `mod_directory`'''
         base_package = os.path.basename(self.mod_directory)
         for pyfile in glob.glob('{}/*.py'.format(base_package)):
             # Get module name out of file path
             pymodule_name = os.path.splitext(os.path.basename(pyfile))[0]
             # Import target module
-            pymodule = importlib.import_module('{}.{}'.format(base_package, pymodule_name))
-
-            # Store all ModBase subclass definitions
-            for name in dir(pymodule):
-                reference = getattr(pymodule, name)
-                if not name.startswith('_'):
-                    if inspect.isclass(reference) and issubclass(reference, modder.ModBase):
-                        self.mod_definitions.append(reference)
-
-    def init_mods(self):
-        '''Instanciate all ModBase subclasses'''
-        for cls in self.mod_definitions:
-            if issubclass(cls, modder.ModBase):
-                self.mods.append(cls())
+            importlib.import_module('{}.{}'.format(base_package, pymodule_name))
 
     def execute(self, mod_func, event):
-        '''Trigger a registered mod method'''
-        # TODO Use a threadpool or something to async execute funtions
+        '''Trigger a registered mod callable'''
         if callable(mod_func):
-            mod_func(event)
+            mod_worker = threading.Thread(
+                target=mod_func,
+                name='{} on {} event'.format(mod_func.__name__, event.name),
+                args=(event, )
+            )
+            mod_worker.daemon = True
+
+            try:
+                self.__pool.add(mod_worker)
+            except modder.exceptions.Full:
+                raise UserWarning(
+                    'ExecutorPool currently full (maxsize {:d})'.format(self.__pool.maxsize)
+                )
+            else:
+                mod_worker.start()
 
     def trigger(self, name):
         '''Trigger an event and broadcast it to all subscribed mods'''
+        self.__pool.clean_up()
+
         if name in modder.EVENTS:
             if name in modder.MOD_REGISTRY:
                 event = self.__generate_event(name)
