@@ -1,6 +1,7 @@
 # coding: utf-8
 from .event import EVENTS, Event
 from .pool import ExecutorPool
+from .storage import ModStorage, get_storage
 from .timer import TimerThread
 
 MOD_REGISTRY = {}
@@ -34,6 +35,6 @@ def on(event_name):
 __all__ = [
     'EVENTS', 'MOD_REGISTRY',
     'register', 'on',
-    'Event', 'TimerThread', 'ExecutorPool',
+    'Event', 'TimerThread', 'ExecutorPool', 'ModStorage', 'get_storage',
     'exceptions',
 ]
