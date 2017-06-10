@@ -1,8 +1,11 @@
 # coding: utf-8
+import atexit
 import glob
 import importlib
 import inspect
 import os.path
+import queue
+import threading
 import time
 
 import modder
@@ -18,6 +21,8 @@ class ModManager(object):
         self.mod_definitions = []
 
         self.check_mod_directory()
+        self.load_mods()
+        self.init_mods()
 
     def check_mod_directory(self):
         '''Make sure `mod_directory` is a valid Python package'''
@@ -78,12 +83,29 @@ class ModManager(object):
 
 
 def test():
-    manager = ModManager()
-    manager.load_mods()
-    manager.init_mods()
-    manager.trigger('Modder.Started')
-    time.sleep(10)
-    manager.trigger('Modder.BeforeQuit')
+    event_queue = queue.Queue()
+    mod_manager = ModManager()
+    event_queue.put('Modder.Started')
+
+    timer_stop = threading.Event()
+    timer_thread = modder.timer.TimerThread(event_queue, timer_stop)
+    timer_thread.daemon = True
+    timer_thread.start()
+
+    def before_quit():
+        timer_stop.set()
+        mod_manager.trigger('Modder.BeforeQuit')
+
+    atexit.register(before_quit)
+
+    while 1:
+        try:
+            event_name = event_queue.get(timeout=1)
+        except queue.Empty:
+            pass
+        else:
+            if event_name in modder.EVENTS:
+                mod_manager.trigger(event_name)
 
 
 if __name__ == '__main__':

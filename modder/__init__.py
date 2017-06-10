@@ -1,7 +1,7 @@
 # coding: utf-8
-from boltons.funcutils import wraps
 from .base import ModBase
 from .event import EVENTS, Event
+from .timer import TimerThread
 
 MOD_REGISTRY = {}
 
@@ -29,3 +29,11 @@ def on(event_name):
         return func
 
     return listener
+
+
+__all__ = [
+    'EVENTS', 'MOD_REGISTRY',
+    'register', 'on',
+    'ModBase',  # TODO Deprecate this
+    'Event', 'TimerThread',
+]
