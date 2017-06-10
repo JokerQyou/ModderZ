@@ -10,7 +10,7 @@ from modder import on
 @on('Modder.BeforeQuit')
 @on('Timer.Interval.Minute')
 def hello_world(event):
-    store = get_storage('hello_world')
+    store = get_storage('hello_world_2')
     saved = store.load()
     if saved.get('timestamp', None):
         print 'Last saved timestamp in', store.name, ':', saved['timestamp']
