@@ -37,8 +37,8 @@ class ExecutorPool(object):
             else:
                 self.__pool.append(item)
 
-    def __non_alive(self, item):
-        '''Detect whether given item is not alive'''
+    def __alive(self, item):
+        '''Detect whether given item is alive'''
         if isinstance(item, (Thread, Process, )):
             return item.is_alive()
         else:
@@ -46,7 +46,7 @@ class ExecutorPool(object):
 
     def clean_up(self):
         '''Clean up all non-alive item in pool'''
-        pool = filter(self.__non_alive, self.__pool)
+        pool = filter(self.__alive, self.__pool)
         if not isinstance(pool, list):
             pool = list(pool)
 
