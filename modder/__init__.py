@@ -1,6 +1,6 @@
 # coding: utf-8
-from .base import ModBase
 from .event import EVENTS, Event
+from .pool import ExecutorPool
 from .timer import TimerThread
 
 MOD_REGISTRY = {}
@@ -34,6 +34,6 @@ def on(event_name):
 __all__ = [
     'EVENTS', 'MOD_REGISTRY',
     'register', 'on',
-    'ModBase',  # TODO Deprecate this
-    'Event', 'TimerThread',
+    'Event', 'TimerThread', 'ExecutorPool',
+    'exceptions',
 ]
