@@ -2,6 +2,7 @@
 import glob
 import importlib
 import os.path
+import sys
 import threading
 import time
 
@@ -45,12 +46,15 @@ class ModManager(object):
 
     def load_mods(self):
         '''Import all modules in `mod_directory`'''
+        sys.path.append(os.path.dirname(self.mod_directory))
+
         base_package = os.path.basename(self.mod_directory)
         for pyfile in glob.glob('{}/*.py'.format(self.mod_directory)):
             # Get module name out of file path
             pymodule_name = os.path.splitext(os.path.basename(pyfile))[0]
             # Import target module
-            importlib.import_module('{}.{}'.format(base_package, pymodule_name))
+            if not pymodule_name.startswith('_'):
+                importlib.import_module('{}.{}'.format(base_package, pymodule_name))
 
     def execute(self, mod_func, event):
         '''Trigger a registered mod callable'''
