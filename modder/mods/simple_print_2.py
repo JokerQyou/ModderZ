@@ -6,9 +6,9 @@ from modder import on
 # from modder import register
 
 
-@on('Modder.Started')
-@on('Modder.BeforeQuit')
-@on('Timer.Interval.Minute')
+# @on('Modder.Started')
+# @on('Modder.BeforeQuit')
+# @on('Timer.Interval.Minute')
 def hello_world(event):
     store = get_storage('hello_world_2')
     saved = store.load()
