@@ -46,7 +46,7 @@ class ModManager(object):
     def load_mods(self):
         '''Import all modules in `mod_directory`'''
         base_package = os.path.basename(self.mod_directory)
-        for pyfile in glob.glob('{}/*.py'.format(base_package)):
+        for pyfile in glob.glob('{}/*.py'.format(self.mod_directory)):
             # Get module name out of file path
             pymodule_name = os.path.splitext(os.path.basename(pyfile))[0]
             # Import target module
