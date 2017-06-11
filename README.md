@@ -15,7 +15,9 @@ cannot even type fluently when this program is running.
 So I got this idea that I *WILL* write a script to kill this process upon its 
 execution. But I don't want to write the script along. I need a framework, or 
 something that notify my script about the events it cares. Basically a sub-pub 
-system for various OS and application events.
+system for various OS and application events. That way I can write a script 
+that listen on `process created` events, and kill the newly created process 
+if its executable is `CompatTelRunner.exe`.
 
 So I started writing Modder2. It's called Modder2 because I have previously 
 named one of my projects "Modder".
