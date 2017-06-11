@@ -8,7 +8,7 @@ class TimerThread(threading.Thread):
         super(TimerThread, self).__init__()
         self.__queue = queue
         self.__stopped = stop_event
-        self.__wait = .5
+        self.__wait = 1
 
         now = time.time()
         self.__last_trigger_minute = now
