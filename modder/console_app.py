@@ -3,20 +3,20 @@
 Start a Modder2 instance without GUI support
 '''
 import atexit
-import queue
+from queue import Empty
 import threading
 
+from . import EVENT_QUEUE
 from .manager import ModManager
 from .timer import TimerThread
 
 
 def main():
-    event_queue = queue.Queue()
     mod_manager = ModManager()
-    event_queue.put('Modder.Started')
+    EVENT_QUEUE.put('Modder.Started')
 
     timer_stop = threading.Event()
-    timer_thread = TimerThread(event_queue, timer_stop)
+    timer_thread = TimerThread(EVENT_QUEUE, timer_stop)
     timer_thread.daemon = True
     timer_thread.start()
 
@@ -29,8 +29,8 @@ def main():
 
     while 1:
         try:
-            event_name = event_queue.get(timeout=1)
-        except queue.Empty:
+            event_name = EVENT_QUEUE.get(timeout=1)
+        except Empty:
             pass
         else:
             mod_manager.trigger(event_name)

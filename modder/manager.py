@@ -6,7 +6,6 @@ import sys
 import threading
 import time
 
-from . import EVENTS
 from . import MOD_REGISTRY
 from .event import Event
 from .exceptions import Full
@@ -92,10 +91,9 @@ class ModManager(object):
         '''Trigger an event and broadcast it to all subscribed mods'''
         self.__pool.clean_up()
 
-        if name in EVENTS:
-            if name in MOD_REGISTRY:
-                event = self.__generate_event(name)
-                [self.execute(func, event) for func in MOD_REGISTRY[name]]
+        if name in MOD_REGISTRY:
+            event = self.__generate_event(name)
+            [self.execute(func, event) for func in MOD_REGISTRY[name]]
 
     def __generate_event(self, name):
         '''Generate Event object with data'''

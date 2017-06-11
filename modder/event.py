@@ -1,6 +1,6 @@
 # coding: utf-8
 
-EVENTS = (
+CORE_EVENTS = (
     'Modder.Started',  # Modder core started
     'Modder.BeforeQuit',  # Modder is quitting
     'Timer.Interval.Minute',  # Triggered every minute
