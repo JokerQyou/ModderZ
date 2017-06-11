@@ -1,22 +1,17 @@
 # coding: utf-8
-import time
+import os.path
 
-from modder import get_storage
-from modder import on
+# from modder import get_storage
+from modder import on, trigger
 # from modder import register
 
 
-# @on('Modder.Started')
+@on('Modder.Started')
 # @on('Modder.BeforeQuit')
 # @on('Timer.Interval.Minute')
 def hello_world(event):
-    store = get_storage('hello_world')
-    saved = store.load()
-    if saved.get('timestamp', None):
-        print 'Last saved timestamp in', store.name, ':', saved['timestamp']
-
-    store.save({'timestamp': time.time()})
-    print 'Hello Modder!', event
+    print 'Hello Modder from', os.path.basename(__file__), event
+    trigger('my_event')
 
 
 # register(hello_world, 'Modder.Started')
