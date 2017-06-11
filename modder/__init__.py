@@ -10,7 +10,7 @@ MOD_REGISTRY = {}
 def register(func, event_name):
     if event_name not in EVENTS:
         raise UserWarning(
-            '{} cannot be registered because {} is not a valid event'.format(func, event)
+            '{} cannot be registered because {} is not a valid event'.format(func, event_name)
         )
         return
 
