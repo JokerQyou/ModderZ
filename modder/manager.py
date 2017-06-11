@@ -44,6 +44,13 @@ class ModManager(object):
             with open(package_init_file, 'w') as wf:
                 wf.write('# coding: utf-8')
 
+    @property
+    def count(self):
+        unique_mods = set()
+        for event_name, mods in MOD_REGISTRY.items():
+            unique_mods.update(mods)
+        return len(unique_mods)
+
     def load_mods(self):
         '''Import all modules in `mod_directory`'''
         sys.path.append(os.path.dirname(self.mod_directory))
@@ -59,21 +66,27 @@ class ModManager(object):
     def execute(self, mod_func, event):
         '''Trigger a registered mod callable'''
         if callable(mod_func):
-            mod_worker = threading.Thread(
-                target=mod_func,
-                name='{} on {} event'.format(mod_func.__name__, event.name),
-                args=(event, )
-            )
-            mod_worker.daemon = True
-
-            try:
-                self.__pool.add(mod_worker)
-            except Full:
-                raise UserWarning(
-                    'ExecutorPool currently full (maxsize {:d})'.format(self.__pool.maxsize)
-                )
+            if event.name == 'Modder.BeforeQuit':
+                try:
+                    mod_func(event)
+                except:
+                    pass
             else:
-                mod_worker.start()
+                mod_worker = threading.Thread(
+                    target=mod_func,
+                    name='{} on {} event'.format(mod_func.__name__, event.name),
+                    args=(event, )
+                )
+                mod_worker.daemon = True
+
+                try:
+                    self.__pool.add(mod_worker)
+                except Full:
+                    raise UserWarning(
+                        'ExecutorPool currently full (maxsize {:d})'.format(self.__pool.maxsize)
+                    )
+                else:
+                    mod_worker.start()
 
     def trigger(self, name):
         '''Trigger an event and broadcast it to all subscribed mods'''
