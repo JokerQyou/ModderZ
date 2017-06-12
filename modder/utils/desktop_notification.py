@@ -6,13 +6,15 @@ import sys
 if getattr(sys, 'frozen', False):
     desktop_icon = os.path.abspath(
         os.path.join(
-            os.path.dirname(sys.executable), 'resources', 'icons8-Module-128.png'
+            os.path.dirname(sys.executable),
+            'resources', 'icons8-Module-128.png'
         )
     )
 else:
     desktop_icon = os.path.abspath(
         os.path.join(
-            os.path.dirname(__file__), 'gui', 'resources', 'icons8-Module-128.png'
+            os.path.dirname(__file__),
+            '..', 'gui', 'resources', 'icons8-Module-128.png'
         )
     )
 
@@ -30,7 +32,9 @@ if platform.system() == 'Darwin':
         notification = NSUserNotification.alloc().init()
         notification.setTitle_(title.decode('utf-8'))
         notification.setInformativeText_(text.decode('utf-8'))
-        notification.setValue_forKey_(NSImage.alloc().initWithContentsOfFile_(desktop_icon), '_identityImage')
+        # This is a private API to replace notification icon,
+        # ref: https://stackoverflow.com/a/24940893
+        notification.setValue_forKey_(NSImage.alloc().initWithContentsOfFile_(desktop_icon), '_identityImage')  # noqa
 
         if sound:
             notification.setSoundName_(NSUserNotificationDefaultSoundName)
