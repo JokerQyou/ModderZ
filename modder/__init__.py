@@ -1,4 +1,5 @@
 # coding: utf-8
+import platform
 import queue
 
 from .event import CORE_EVENTS, Event
@@ -8,6 +9,7 @@ from .timer import TimerThread
 
 MOD_REGISTRY = {}
 EVENT_QUEUE = queue.Queue()
+GUI_MODE = False
 
 
 def register(func, event_name):
@@ -36,6 +38,21 @@ def trigger(event_name, data=None):
     if event_name not in CORE_EVENTS:
         # TODO Support passing event data along with event name
         EVENT_QUEUE.put_nowait(event_name)
+
+
+def notify(text, title=None):
+    '''Post a notification'''
+    title = title or ''
+    if GUI_MODE:
+        import wx
+        if platform.system() == 'Windows':
+            return wx.GetApp()._tray.ShowBalloon(title, text)
+        elif platform.system() == 'Darwin':
+            pass
+        else:
+            print title, text
+    else:
+        print title, text
 
 
 __all__ = [

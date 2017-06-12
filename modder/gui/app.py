@@ -12,6 +12,8 @@ from .trayicon import TrayIcon
 class ModderGuiApp(wx.App):
 
     def OnInit(self):
+        modder.GUI_MODE = True
+
         self._manager = modder.manager.ModManager()
         self._tray = TrayIcon()
 

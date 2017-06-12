@@ -32,7 +32,7 @@ class TrayIcon(wx.TaskBarIcon):
         menu.AppendSeparator()
 
         mods_count = wx.GetApp()._manager.count
-        create_menu_item(menu, '{:d} mods'.format(mods_count))
+        create_menu_item(menu, '{:d} mods loaded'.format(mods_count))
         create_menu_item(menu, 'Exit', self.on_exit)
         return menu
 
