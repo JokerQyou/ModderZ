@@ -1,2 +1,3 @@
 sqlitedict
-wxPython==3.0.2.0
+pyobjc; sys_platform == 'darwin'
+win10toast; sys_platform == 'win32'
