@@ -31,8 +31,8 @@ You'll need wxPython to run the GUI app.
 * On macOS, get [Homebrew](https://brew.sh/) and run `brew install wxPython`.
 * On Linux, I'm sure you'll find the way by yourself. :P
 
-After installing wxPython, run `pip install -r requirements` to install other 
-required Python packages.
+After installing wxPython, run `pip install -r requirements.txt` to install 
+other required Python packages.
 
 # Usage
 GUI is not usable at this time. You can run an instance in terminal:
