@@ -1,11 +1,11 @@
 # coding: utf-8
-import platform
 import queue
 
 from .event import CORE_EVENTS, Event
 from .pool import ExecutorPool
 from .storage import ModStorage, get_storage
 from .timer import TimerThread
+from .utils import desktop_notify
 
 MOD_REGISTRY = {}
 EVENT_QUEUE = queue.Queue()
@@ -40,17 +40,10 @@ def trigger(event_name, data=None):
         EVENT_QUEUE.put_nowait(event_name)
 
 
-def notify(text, title=None):
+def notify(text, title=None, sound=False):
     '''Post a notification'''
-    title = title or ''
     if GUI_MODE:
-        import wx
-        if platform.system() == 'Windows':
-            return wx.GetApp()._tray.ShowBalloon(title, text)
-        elif platform.system() == 'Darwin':
-            pass
-        else:
-            print title, text
+        desktop_notify(text, title=title, sound=sound)
     else:
         print title, text
 

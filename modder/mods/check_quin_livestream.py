@@ -1,6 +1,5 @@
 # coding: utf-8
 import random
-import time
 
 from modder import on, get_storage, notify
 import requests
@@ -69,4 +68,4 @@ def check_quin_livestream(event):
                 'last_triggered': event.timestamp,
             })
             if text:
-                notify(text, title=u'直播通知')
+                notify(text, title='直播通知', sound=True)

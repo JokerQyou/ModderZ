@@ -3,7 +3,7 @@ import os.path
 import time
 
 from modder import get_storage
-from modder import on
+from modder import on, notify
 # from modder import register
 
 
@@ -17,7 +17,7 @@ def hello_world(event):
     store = get_storage('hello_world_2')
     saved = store.load()
     if saved.get('timestamp', None):
-        print 'Last saved timestamp in', store.name, ':', saved['timestamp']
+        notify('Last saved itmestamp in {}: {}'.format(store.name, saved['timestamp']))
 
     store.save({'timestamp': time.time()})
 
