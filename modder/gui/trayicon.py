@@ -4,6 +4,8 @@ import platform
 
 import wx
 
+from .frames import ModManagerFrame
+
 
 def create_menu_item(menu, label, func=None):
     menu_item = wx.MenuItem(menu, -1, label)
@@ -25,6 +27,7 @@ class TrayIcon(wx.TaskBarIcon):
         super(TrayIcon, self).__init__()
         self._frame = frame or wx.Frame(None)
         self.SetIcon(wx.Icon(self.icon_fpath, wx.BITMAP_TYPE_PNG))
+        self._manager_frame = None
 
     def CreatePopupMenu(self):
         menu = wx.Menu()
@@ -37,7 +40,9 @@ class TrayIcon(wx.TaskBarIcon):
         return menu
 
     def on_manage_mods(self, evt):
-        pass
+        if self._manager_frame is None:
+            self._manager_frame = ModManagerFrame()
+        self._manager_frame.Show()
 
     def on_exit(self, evt):
         wx.CallAfter(self.Destroy)

@@ -18,6 +18,16 @@ else:
         )
     )
 
+
+def u_(s):
+    '''str => unicode'''
+    if isinstance(s, str):
+        return s.decode('utf-8')
+    elif isinstance(s, unicode):
+        return s
+    return str(s).decode('utf-8')
+
+
 if platform.system() == 'Darwin':
     from AppKit import NSImage
     from Foundation import NSUserNotificationDefaultSoundName
@@ -30,8 +40,8 @@ if platform.system() == 'Darwin':
         title = title or 'Modder'
 
         notification = NSUserNotification.alloc().init()
-        notification.setTitle_(title.decode('utf-8'))
-        notification.setInformativeText_(text.decode('utf-8'))
+        notification.setTitle_(u_(title))
+        notification.setInformativeText_(u_(text))
         # This is a private API to replace notification icon,
         # ref: https://stackoverflow.com/a/24940893
         notification.setValue_forKey_(NSImage.alloc().initWithContentsOfFile_(desktop_icon), '_identityImage')  # noqa
@@ -42,16 +52,20 @@ if platform.system() == 'Darwin':
         NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification_(notification)  # noqa
 
 elif platform.system() == 'Windows':
-    from win10toast import ToastNotifier
+    import wx
+
+    # from win10toast import ToastNotifier
 
     def desktop_notify(text, title=None, sound=False):
         title = title or 'Modder'
 
-        ToastNotifier().show_toast(
-            title.decode('utf-8'),
-            text.decode('utf-8'),
-            icon_path=desktop_icon
-        )
+        wx.GetApp()._tray.ShowBalloon(u_(title), u_(text))
+
+        # ToastNotifier().show_toast(
+        #     u_(title),
+        #     u_(text),
+        #     icon_path=desktop_icon
+        # )
 
 elif platform.system() == 'Linux':
     def desktop_notify(text, title=None, sound=False):

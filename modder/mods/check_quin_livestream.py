@@ -37,6 +37,7 @@ def check_quin_livestream(event):
     saved = storage.load()
     last_triggered = saved.get('last_triggered', 0)
     if saved.get('is_streaming', False):
+        notify('已经在播了', title='直播通知')
         interval = 60 * 60  # 开播之后，每 60 分钟检查一次
     else:
         interval = 60 * 10  # 没开播时，每 10 分钟检查一次
