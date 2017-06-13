@@ -40,10 +40,10 @@ def trigger(event_name, data=None):
         EVENT_QUEUE.put_nowait(event_name)
 
 
-def notify(text, title=None, sound=False):
+def notify(text, title=None, sound=False, url=None):
     '''Post a notification'''
     if GUI_MODE:
-        desktop_notify(text, title=title, sound=sound)
+        desktop_notify(text, title=title, sound=sound, url=url)
     else:
         print title, text
 

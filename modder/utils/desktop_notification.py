@@ -73,16 +73,17 @@ if platform.system() == 'Darwin':
                 '-actions', default_action,
             ])
 
-        result = json.loads(subprocess.check_output(commandline))
-
-        # Make the action button open the same URL
-        if url and result['activationType'] == 'actionClicked':
-            webbrowser.open(url)
+            result = json.loads(subprocess.check_output(commandline))
+            # Make the action button open the same URL
+            if result['activationType'] == 'actionClicked':
+                webbrowser.open(url)
+        else:
+            subprocess.call(commandline)
 
 elif platform.system() == 'Windows':
     import wx
 
-    def desktop_notify(text, title=None, sound=False):
+    def desktop_notify(text, title=None, sound=False, url=None, timeout=10):
         title = title or 'Modder'
 
         wx.GetApp()._tray.ShowBalloon(u_(title), u_(text))

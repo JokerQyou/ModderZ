@@ -19,12 +19,11 @@ def is_quin_live(live):
         pass
     else:
         live = live['data']
-        quin_live_url = 'http://douyu.com/quin'
         if live['room_status'] == '1':
             return (
                 u'惊了！{}居然播了，不敢信。'
-                u'而且有{}个猛男在看直播，整个房间都gay gay的。 {}'
-            ).format(random_quin_nick(), live['online'], quin_live_url)
+                u'而且有{}个猛男在看直播，整个房间都gay gay的。'
+            ).format(random_quin_nick(), live['online'])
         elif live['room_status'] == '2':
             pass
         else:
@@ -69,4 +68,7 @@ def check_quin_livestream(event):
                 'last_triggered': event.timestamp,
             })
             if text:
-                notify(text, title='直播通知', sound=True)
+                notify(
+                    text, title='直播通知',
+                    sound=True, url='http://douyu.com/quin'
+                )
