@@ -81,12 +81,41 @@ if platform.system() == 'Darwin':
             subprocess.call(commandline)
 
 elif platform.system() == 'Windows':
-    import wx
+    if FROZEN:
+        notifier_binary = os.path.abspath(
+            os.path.join(
+                os.path.dirname(sys.executable), 'binaries', 'SnoreToast.exe'  # noqa
+            )
+        )
+    else:
+        notifier_binary = os.path.abspath(
+            os.path.join(
+                os.path.dirname(__file__), '..', 'binaries', 'SnoreToast.exe'  # noqa
+            )
+        )
 
     def desktop_notify(text, title=None, sound=False, url=None, timeout=10):
         title = title or 'Modder'
+        commandline = [
+            notifier_binary,
+            '-appId', app_name,
+            '-t', u_(title).encode(sys.getfilesystemencoding()),
+            '-m', u_(text).encode(sys.getfilesystemencoding()),
+            '-p', desktop_icon,
+        ]
 
-        wx.GetApp()._tray.ShowBalloon(u_(title), u_(text))
+        if sound:
+            commandline.extend(['-s', 'Notification.Default'])
+        else:
+            commandline.extend(['-silent'])
+
+        if url:
+            commandline.extend(['-w'])
+
+            if subprocess.call(commandline) == 0:
+                webbrowser.open(url)
+        else:
+            subprocess.call(commandline)
 
 elif platform.system() == 'Linux':
     def desktop_notify(text, title=None, sound=False):
