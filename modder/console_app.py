@@ -13,7 +13,7 @@ from .timer import TimerThread
 
 def main():
     mod_manager = ModManager()
-    EVENT_QUEUE.put('Modder.Started')
+    EVENT_QUEUE.put(('Modder.Started', None))
 
     timer_stop = threading.Event()
     timer_thread = TimerThread(EVENT_QUEUE, timer_stop)
@@ -29,11 +29,11 @@ def main():
 
     while 1:
         try:
-            event_name = EVENT_QUEUE.get(timeout=1)
+            event_name, event_data = EVENT_QUEUE.get(timeout=1)
         except Empty:
             pass
         else:
-            mod_manager.trigger(event_name)
+            mod_manager.trigger(event_name, data=event_data)
 
 
 if __name__ == '__main__':

@@ -87,19 +87,19 @@ class ModManager(object):
                 else:
                     mod_worker.start()
 
-    def trigger(self, name):
+    def trigger(self, name, data=None):
         '''Trigger an event and broadcast it to all subscribed mods'''
         self.__pool.clean_up()
 
         if name in MOD_REGISTRY:
-            event = self.__generate_event(name)
+            event = self.__generate_event(name, data=data)
             [self.execute(func, event) for func in MOD_REGISTRY[name]]
 
-    def __generate_event(self, name):
+    def __generate_event(self, name, data=None):
         '''Generate Event object with data'''
         if name.startswith('Modder.'):
             return Event(name)
         elif name.startswith('Timer.'):
             return Event(name, data={'timestamp': time.time()})
         else:
-            return Event(name)
+            return Event(name, data=data)

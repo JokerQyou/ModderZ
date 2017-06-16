@@ -37,7 +37,7 @@ def trigger(event_name, data=None):
     '''
     if event_name not in CORE_EVENTS:
         # TODO Support passing event data along with event name
-        EVENT_QUEUE.put_nowait(event_name)
+        EVENT_QUEUE.put_nowait((event_name, data))
 
 
 def notify(text, title=None, sound=False, url=None):
@@ -45,7 +45,7 @@ def notify(text, title=None, sound=False, url=None):
     if GUI_MODE:
         desktop_notify(text, title=title, sound=sound, url=url)
     else:
-        print title, text
+        print title.decode('utf-8'), text.decode('utf-8')
 
 
 __all__ = [

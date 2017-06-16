@@ -24,12 +24,12 @@ class TimerThread(threading.Thread):
 
             if passed_minute >= 60:
                 self.__last_trigger_minute = now
-                self.__queue.put('Timer.Interval.Minute')
+                self.__queue.put(('Timer.Interval.Minute', None))
 
             if passed_hour >= 3600:
                 self.__last_trigger_hour = now
-                self.__queue.put('Timer.Interval.Hour')
+                self.__queue.put(('Timer.Interval.Hour', None))
 
             if passed_day >= 86400:
                 self.__last_trigger_day = now
-                self.__queue.put('Timer.Interval.Day')
+                self.__queue.put(('Timer.Interval.Day', None))

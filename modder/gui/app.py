@@ -27,18 +27,18 @@ class ModderGuiApp(wx.App):
         )
         self._modder_thread.daemon = True
 
-        modder.EVENT_QUEUE.put_nowait('Modder.Started')
+        modder.EVENT_QUEUE.put_nowait(('Modder.Started', None))
         self._modder_thread.start()
         return True
 
     def _process_mod_event_queue(self):
         while 1:
             try:
-                event_name = modder.EVENT_QUEUE.get(timeout=1)
+                event_name, event_data = modder.EVENT_QUEUE.get(timeout=1)
             except Empty:
                 pass
             else:
-                self._manager.trigger(event_name)
+                self._manager.trigger(event_name, data=event_data)
 
     def OnExit(self):
         self._timer_stop_event.set()
