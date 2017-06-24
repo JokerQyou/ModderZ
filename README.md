@@ -12,7 +12,7 @@ slow down my computer by continuously reading large amount of data from disk
 and occupying at least one CPU core. All my disks are Intel SSDs and yet I 
 cannot even type fluently when this program is running.
 
-So I got this idea that I *WILL* write a script to kill this process upon its 
+So I got this idea that I **WILL** write a script to kill this process upon its 
 execution. But I don't want to write the script along. I need a framework, or 
 something that notify my script about the events it cares. Basically a sub-pub 
 system for various OS and application events. That way I can write a script 
@@ -69,17 +69,30 @@ Modder2 will eventually support custom mods location, but it currently does not.
 Core events are defined by Modder2 and  will only be triggered by Modder2. 
 Currently there are:
 
-* `Modder.Started`
-* `Modder.BeforeQuit`
-* `Timer.Interval.Minute`
-* `Timer.Interval.Hour`
-* `Timer.Interval.Day`
+* `Modder.Started` no event data
+* `Modder.BeforeQuit` no event data
+* `Timer.Interval.Minute` event data: `timestamp`
+* `Timer.Interval.Hour` event data: `timestamp`
+* `Timer.Interval.Day` event data: `timestamp`
 
 By looking at their name you will be able to tell when they get triggered.
 
 Your registered function will be called in a separate thread. 
 Specially, when `Modder.BeforeQuit` event is triggered, functions will be 
-called in *current* thread.
+called in **current** thread.
+
+# Mod events
+Mod events are triggered by mods. Modder2 does not track the event source, it 
+only passes events through the queue.
+
+* `Process.Created` triggered by `process_watcher.watch_process_creation`
+  * Availability: `Windows` platform
+  * Event data:
+    * `caption`
+    * `process_name`
+    * `executable_path`
+    * `pid` the process ID
+  * Description: triggered when a new process is created.
 
 # But...
 
