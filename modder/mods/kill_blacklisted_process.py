@@ -37,7 +37,7 @@ def kill_blacklisted_processes(event):
     else:
         targets = filter(lambda p: p.name() in blacklist, psutil.process_iter())
         killed_count = 0
-        total_count = len(targets)
+        total_count = len(list(targets))
 
         for process in targets:
             try:

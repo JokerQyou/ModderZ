@@ -43,3 +43,4 @@ class ModderGuiApp(wx.App):
     def OnExit(self):
         self._timer_stop_event.set()
         self._manager.trigger('Modder.BeforeQuit')
+        return 0

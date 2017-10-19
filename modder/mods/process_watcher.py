@@ -32,10 +32,10 @@ if platform.system() == 'Windows':
                         }
                     )
                 except Exception as e:
-                    print 'innter error:', e
+                    print('innter error:' + e)
                     pass
         except Exception as e:
-            print 'outter error:', e
+            print('outter error:' + e)
             pass
         finally:
             pythoncom.CoUninitialize()

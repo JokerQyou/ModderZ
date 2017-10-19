@@ -18,6 +18,7 @@ class ManagerFrame(wx.Frame):
         # begin wxGlade: ManagerFrame.__init__
         wx.Frame.__init__(self, *args, **kwds)
         self.mod_list = wx.ListCtrl(self, wx.ID_ANY)
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
 
         self.__set_properties()
         self.__do_layout()
@@ -36,5 +37,8 @@ class ManagerFrame(wx.Frame):
         main_sizer.Fit(self)
         self.Layout()
         # end wxGlade
+
+    def OnClose(self, evt):
+        self.Hide()
 
 # end of class ManagerFrame

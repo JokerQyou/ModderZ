@@ -3,6 +3,7 @@ import os.path
 import platform
 
 import wx
+import wx.adv
 
 from .frames import ModManagerFrame
 
@@ -14,11 +15,11 @@ def create_menu_item(menu, label, func=None):
     else:
         menu_item.Enable(False)
 
-    menu.AppendItem(menu_item)
+    menu.Append(menu_item)
     return menu_item
 
 
-class TrayIcon(wx.TaskBarIcon):
+class TrayIcon(wx.adv.TaskBarIcon):
     icon_fpath = os.path.join(
         os.path.dirname(__file__), 'resources', 'icons8-Module-64.png'
     )
@@ -46,4 +47,6 @@ class TrayIcon(wx.TaskBarIcon):
 
     def on_exit(self, evt):
         wx.CallAfter(self.Destroy)
-        self._frame.Close()
+        self._frame.Destroy()
+        if self._manager_frame:
+            self._manager_frame.Destroy()
