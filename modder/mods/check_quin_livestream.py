@@ -32,6 +32,7 @@ def is_quin_live(live):
 
 @on('Timer.Interval.Minute')
 def check_quin_livestream(event):
+    'Mr.Quin 直播提醒'
     storage = get_storage('check_quin_livestream')
     saved = storage.load()
     last_triggered = saved.get('last_triggered', 0)

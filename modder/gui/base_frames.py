@@ -17,7 +17,9 @@ class ManagerFrame(wx.Frame):
     def __init__(self, *args, **kwds):
         # begin wxGlade: ManagerFrame.__init__
         wx.Frame.__init__(self, *args, **kwds)
-        self.mod_list = wx.ListCtrl(self, wx.ID_ANY)
+        self.mod_list = wx.ListCtrl(
+            self, wx.ID_ANY, style=wx.LC_REPORT | wx.LC_HRULES
+        )
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
         self.__set_properties()
