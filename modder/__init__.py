@@ -45,7 +45,7 @@ def notify(text, title=None, sound=False, url=None):
     if GUI_MODE:
         desktop_notify(text, title=title, sound=sound, url=url)
     else:
-        print(title.decode('utf-8') + text.decode('utf-8'))
+        print(title + text)
 
 
 __all__ = [

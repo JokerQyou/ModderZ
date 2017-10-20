@@ -25,15 +25,6 @@ else:
     )
 
 
-def u_(s):
-    '''str => unicode'''
-    if isinstance(s, str):
-        return s.decode('utf-8')
-    elif isinstance(s, unicode):
-        return s
-    return str(s).decode('utf-8')
-
-
 if platform.system() == 'Darwin':
     if FROZEN:
         notifier_binary = os.path.abspath(
@@ -53,8 +44,8 @@ if platform.system() == 'Darwin':
         default_action = 'View'
         commandline = [
             notifier_binary,
-            '-message', u_(text),
-            '-title', u_(title),
+            '-message', text,
+            '-title', title,
             '-appIcon', desktop_icon,
             '-contentImage', desktop_icon,
             '-json',  # Return JSON data
@@ -99,8 +90,8 @@ elif platform.system() == 'Windows':
         commandline = [
             notifier_binary,
             '-appId', app_name,
-            '-t', u_(title).encode(sys.getfilesystemencoding()),
-            '-m', u_(text).encode(sys.getfilesystemencoding()),
+            '-t', title,
+            '-m', text,
             '-p', desktop_icon,
         ]
 
