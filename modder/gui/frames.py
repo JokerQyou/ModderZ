@@ -3,9 +3,7 @@ import wx
 from wx.lib.floatcanvas import FloatCanvas as FC
 
 from modder import MOD_REGISTRY
-from .base_frames import ManagerFrame
 from modder.gui.graph.models import Block, ConnectorLine, CanvasMixin
-from modder.gui.graph.test import DrawFrame
 
 
 class ModManagerFrame(wx.Frame, CanvasMixin):
