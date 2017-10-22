@@ -1,6 +1,4 @@
 # coding: utf-8
-from functools import partial
-
 import numpy as N
 import wx
 

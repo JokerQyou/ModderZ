@@ -8,7 +8,6 @@ It also contains a simple prototype for a "Connector" object
 
 """
 import wx
-from wx.lib.floatcanvas import FloatCanvas
 from wx.lib.floatcanvas import FloatCanvas as FC
 
 from .models import Block, ConnectorLine, CanvasMixin
@@ -26,7 +25,7 @@ class DrawFrame(wx.Frame, CanvasMixin):
 
         self.CreateStatusBar()
         # Add the Canvas
-        self.Canvas = FloatCanvas.FloatCanvas(
+        self.Canvas = FC.FloatCanvas(
             self, -1, (500, 500),
             ProjectionFun=None,
             Debug=0,
