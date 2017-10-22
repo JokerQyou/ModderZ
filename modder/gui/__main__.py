@@ -1,6 +1,4 @@
 # coding: utf-8
-from .app import ModderGuiApp
+from . import launch_gui
 
-
-modder = ModderGuiApp(False)
-modder.MainLoop()
+launch_gui()
